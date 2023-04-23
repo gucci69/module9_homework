@@ -20,7 +20,7 @@
         const btn = document.querySelector("button");
 
         const useRequest = (value1, value2) => {
-            return fetch(`https://loremflickr.com/json/g/${value1}/${value2}/all`)
+            return fetch(`https://picsum.photos/${value1}/${value2}/all`)
             .then((response) => {
                 return response.json();
             })
@@ -31,8 +31,8 @@
         btn.addEventListener("click", async () => {
             const value1 = document.querySelector('#input-1').value;
             const value2 = document.querySelector('#input-2').value;
-            if ((value1 < 100 || value1 > 500) || (value2 < 100 || value2 > 500)){
-                div.innerHTML = 'число вне диапазона от 100 до 500';
+            if ((value1 < 100 || value1 > 300) || (value2 < 100 || value2 > 300)){
+                div.innerHTML = 'число вне диапазона от 100 до 300';
             }else{
                 let apiData = await useRequest(value1, value2);
                 div.innerHTML = `<img src="${apiData.file}">`;
