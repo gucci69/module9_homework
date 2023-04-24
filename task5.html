@@ -23,54 +23,33 @@
     <div id="container"></div>
 
     <script>
+    const resultNode = document.querySelector('.j-result');
+    const btn = document.querySelector('.j-btn-request');
 
-        const div = document.getElementById("container");
-        const btn = document.querySelector("button");
-        let cards = '';
-        cards = localStorage.getItem("cards");
-        if (cards){
-            div.innerHTML = cards;
-        };
-
-        const useRequest = (imageWidth, imageHeight, randomNumber) => {
-            return fetch(`https://source.unsplash.com/collection/928423/${imageWidth}x${imageHeight}/?sig=${randomNumber}`)
-            .then((response) => {
-                return response.url;
-            })
-            .then((url) => { return url; })
-            .catch(() => { console.log('error') });
-        };
-
-        async function displayResult(value1, value2){
-            const numImagesAvailable = 10;
-                let randomNumber = Math.floor(Math.random() * numImagesAvailable);
-                let apiData = '';
-                cards = '';
-                for(let i = 0; i < numImagesAvailable; i++){
-                    apiData = await useRequest(value1, value2, randomNumber);
-                    cards += `
-                        <div class="card">
-                            <img src="${apiData}" class="card-image"/>
-                        </div>
-                    `;
-                }       
-            localStorage.removeItem('cards');
-            localStorage.setItem('cards', cards);                    
-            div.innerHTML = cards;
+    btn.addEventListener('click', () => {
+        const value1 = document.getElementById('page').value;
+        const value2 = document.getElementById('limit').value;
+        let s = document.getElementById('result');
+        s.textContent = '';
+        if (!(value1 >= 1 && value1 <= 10)) {
+            s.textContent = 'Номер страницы вне диапазона от 1 до 10';
+            return;
         }
-       
-        btn.addEventListener("click", () => {
-            const value1 = document.querySelector('#input-1').value;
-            const value2 = document.querySelector('#input-2').value;
-            let errorLog = '';
-            errorLog = ((typeof value1 == "number") || (value1 < 100 || value1 > 500)) ? 'Ширина картинки вне диапазона от 100 до 500<br>' : ''; 
-            errorLog += ((typeof value2 == "number") || (value2 < 100 || value1 > 500)) ? 'Высота картинки вне диапазона от 100 до 500' : '';
-            div.innerHTML = errorLog;
-
-            if (!errorLog){
-                displayResult(value1, value2);
-            };
-        });
+        else if(!(value2 >= 1 && value2 <= 10)) {
+            s.textContent = 'Лимит вне диапазона от 1 до 10';
+            return;
+        }
+        else if(!(value1 >= 1 && value1 <= 10 && value2 >= 1 && value2 <= 10)) {
+            s.textContent = 'Номер страницы и лимит вне диапазона от 1 до 10';
+            return;
+        } else {
+            fetch(`https://picsum.photos/v2/list?page=${value1}&limit=${value2}`)
+                .then((response) => {
+                    document.getElementById('result').src = response.url;
+                });
+            console.log(result);
+        }
+    });
     </script>
 
 </body>
